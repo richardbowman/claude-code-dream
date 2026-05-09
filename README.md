@@ -46,12 +46,10 @@ Not AGI. Log parsing + structured memory writing. But the practical effect is an
 ## Install
 
 ```bash
-git clone https://github.com/richardbowman/claude-code-dream
-cd claude-code-dream
-bash install.sh
+curl -fsSL https://raw.githubusercontent.com/richardbowman/claude-code-dream/main/install.sh | bash
 ```
 
-The installer:
+That's it. The installer:
 1. Copies `SKILL.md` to `~/.claude/skills/dream/`
 2. Adds the trigger line to your `~/.claude/CLAUDE.md` skills table (if you have one)
 
@@ -63,10 +61,15 @@ Then start a new Claude Code session and run:
 
 ## Manual install
 
-If you prefer to install manually:
+If you prefer not to pipe to bash:
 
-1. Copy `SKILL.md` to `~/.claude/skills/dream/SKILL.md`
-2. Add this line to your skills table in `~/.claude/CLAUDE.md`:
+```bash
+git clone https://github.com/richardbowman/claude-code-dream
+cd claude-code-dream
+bash install.sh
+```
+
+Or fully manual — copy `SKILL.md` to `~/.claude/skills/dream/SKILL.md` and add this line to your skills table in `~/.claude/CLAUDE.md`:
 
 ```
 | Consolidate memory, mine conversation logs for friction/feedback, run /dream | `dream` |
