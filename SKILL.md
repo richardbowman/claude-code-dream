@@ -293,15 +293,36 @@ Keep MEMORY.md under 200 lines. Archive entries older than 90 days to `memory/ar
 
 ---
 
-## Phase 5: OBSIDIAN REPORT
+## Phase 5: SESSION REPORT
 
-If the user has an Obsidian vault, write a dated report. Check for a vault at `~/Documents/Personal/` or skip this phase if none exists.
+Write a dated session report. Detect where to save it using this priority order:
 
 ```bash
 DATE=$(date +%Y-%m-%d)
 ```
 
-Write to: `~/Documents/Personal/Claude/dream-${DATE}.md`
+### Detection order
+
+**1. Obsidian vault** — check if `~/.claude/dream-obsidian-vault` exists:
+```bash
+[ -f ~/.claude/dream-obsidian-vault ] && cat ~/.claude/dream-obsidian-vault
+```
+This file should contain the absolute path to your Obsidian vault (e.g. `/Users/you/Documents/MyVault`).  
+The vault name for the `obsidian://` URI is derived from the last path component.  
+If found → write to `<vault-path>/Claude/dream-${DATE}.md`
+
+**2. Custom directory** — check if `~/.claude/dream-report-dir` exists:
+```bash
+[ -f ~/.claude/dream-report-dir ] && cat ~/.claude/dream-report-dir
+```
+If found → write to `<contents-of-file>/dream-${DATE}.md`
+
+**3. Fallback** — write to `~/.claude/dream-reports/dream-${DATE}.md` (create dir if needed):
+```bash
+mkdir -p ~/.claude/dream-reports
+```
+
+### Report content (same for all three branches)
 
 ```markdown
 # Dream Session — YYYY-MM-DD
@@ -319,14 +340,24 @@ Write to: `~/Documents/Personal/Claude/dream-${DATE}.md`
 ## Insights
 ```
 
-Add a wikilink in today's daily note at `~/Documents/Personal/Daily/${DATE}.md` under `## Claude Sessions`.
+### Post-write actions (branch-specific)
 
-Open in Obsidian:
+**Obsidian branch only:**
+- Add a wikilink in today's daily note at `<vault-path>/Daily/${DATE}.md` under `## Claude Sessions`
+- Open in Obsidian (vault name = last component of vault path):
 ```bash
 DATE=$(date +%Y-%m-%d)
+VAULT_PATH=$(cat ~/.claude/dream-obsidian-vault)
+VAULT_NAME=$(basename "$VAULT_PATH")
 ENCODED=$(python3 -c "import urllib.parse; print(urllib.parse.quote('Claude/dream-${DATE}'))")
-open "obsidian://open?vault=Personal&file=${ENCODED}"
+open "obsidian://open?vault=${VAULT_NAME}&file=${ENCODED}"
 ```
+
+**Custom dir branch only:**
+- Open with system default (`open` on macOS, `xdg-open` on Linux)
+
+**Fallback branch only:**
+- Print the report path to the terminal so the user knows where to find it
 
 ---
 

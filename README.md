@@ -83,7 +83,7 @@ The skill runs 6 phases:
 2. **FRICTION SCAN** — Python script extracts user messages matching ~25 friction patterns across all `.jsonl` logs since the last run; also captures prior assistant context so Claude understands what triggered each correction
 3. **PATTERN ANALYSIS** — Claude reasons through the signals: cross-references against existing rules, discards noise, clusters new patterns
 4. **MEMORY UPDATE** — writes new `feedback_*.md` files, reinforces violated rules, updates `MEMORY.md` index
-5. **OBSIDIAN REPORT** — saves a dated session report to your vault (optional, skipped if no vault found)
+5. **SESSION REPORT** — saves a dated session report to your Obsidian vault (`~/.claude/dream-obsidian-vault`), a custom directory (`~/.claude/dream-report-dir`), or `~/.claude/dream-reports/` as a fallback
 6. **STAMP** — writes completion timestamp to `~/.claude/dream-last-run`
 
 ## Memory file format
