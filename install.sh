@@ -7,14 +7,21 @@ set -e
 SKILL_DIR="$HOME/.claude/skills/dream"
 CLAUDE_MD="$HOME/.claude/CLAUDE.md"
 TRIGGER_LINE="| Consolidate memory, mine conversation logs for friction/feedback, run /dream | \`dream\` |"
+SKILL_URL="https://raw.githubusercontent.com/richardbowman/claude-code-dream/main/SKILL.md"
 
 echo ""
 echo "Installing claude-code-dream skill..."
 echo ""
 
-# 1. Copy skill file
+# 1. Install skill file
 mkdir -p "$SKILL_DIR"
-cp "$(dirname "$0")/SKILL.md" "$SKILL_DIR/SKILL.md"
+# When piped via curl | bash, dirname "$0" resolves to "." and SKILL.md won't be present,
+# so download from GitHub directly instead.
+if [ -f "$(dirname "$0")/SKILL.md" ]; then
+    cp "$(dirname "$0")/SKILL.md" "$SKILL_DIR/SKILL.md"
+else
+    curl -fsSL "$SKILL_URL" -o "$SKILL_DIR/SKILL.md"
+fi
 echo "✓ Skill installed to $SKILL_DIR/SKILL.md"
 
 # 2. Wire into CLAUDE.md if it exists
